@@ -8,6 +8,8 @@ import (
 	"github.com/sclevine/spec"
 )
 
+const ErrorColor = "\u001b[31m%s\033[0m"
+
 // Terminal reports specs via stdout.
 type Terminal struct{}
 
@@ -47,5 +49,11 @@ func (Terminal) Specs(_ *testing.T, specs <-chan spec.Spec) {
 			}
 		}
 	}
-	fmt.Printf("\nPassed: %d | Failed: %d | Skipped: %d\n\n", passed, failed, skipped)
+
+	report := fmt.Sprintf("Passed: %d | Failed: %d | Skipped: %d\n\n", passed, failed, skipped)
+	if failed == 0 {
+		fmt.Printf("\n" + report)
+	} else {
+		fmt.Printf(ErrorColor, report)
+	}
 }
